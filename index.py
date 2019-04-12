@@ -21,6 +21,10 @@ class TechnologyPower:
         self.login(username, pwd)
         # 阅读文章积分
         time.sleep(2)
+        if self.browser.current_url != 'https://pc.xuexi.cn/points/my-study.html':
+            raise Exception('登录失败，可能是出现了验证码，建议确认账号密码或重试')
+        else:
+            print('登录成功')
         self.jumpToHome()
         time.sleep(2)
         self.openArticleList()
@@ -30,10 +34,6 @@ class TechnologyPower:
         # 看视频计分
         # self.browser.set_window_size(1280, 10000)  # 设定窗口大小，服务于后面的绝对定位点击
         time.sleep(2)
-        if self.browser.current_url != 'https://pc.xuexi.cn/points/my-study.html':
-            raise Exception('登录失败，可能是出现了验证码，建议确认账号密码或重试')
-        else:
-            print('登录成功')
         self.jumpToHome()
         time.sleep(2)
         self.openVideoList()
