@@ -1,6 +1,10 @@
 from selenium import webdriver, common
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.common.by import By
+import os
 import time
 import random
 import sys
@@ -11,6 +15,7 @@ class TechnologyPower:
     def __init__(self, username, pwd):
         self.startUrl = 'https://login.dingtalk.com/login/index.htm?goto=https%3A%2F%2Foapi.dingtalk.com%2Fconnect%2Foauth2%2Fsns_authorize%3Fappid%3Ddingoankubyrfkttorhpou%26response_type%3Dcode%26scope%3Dsnsapi_login%26redirect_uri%3Dhttps%3A%2F%2Fpc-api.xuexi.cn%2Fopen%2Fapi%2Fsns%2Fcallback'
         self.homeUrl = 'https://www.xuexi.cn/'
+        self.isLogin = False
         option = webdriver.ChromeOptions()
         option.add_argument("headless")
         option.add_experimental_option(
@@ -18,28 +23,37 @@ class TechnologyPower:
         self.browser = webdriver.Chrome(options=option)
         self.articleListHandle = ''
         self.videoListHandle = ''
-        self.login(username, pwd)
-        # 阅读文章积分
-        time.sleep(2)
-        if self.browser.current_url != 'https://pc.xuexi.cn/points/my-study.html':
-            raise Exception('登录失败，可能是出现了验证码，建议确认账号密码或重试')
-        else:
-            print('登录成功')
-        self.jumpToHome()
-        time.sleep(2)
-        self.openArticleList()
-        for i in range(6):
-          time.sleep(2)
-          self.watchArticle(2 * i - 1)
-        # 看视频计分
-        # self.browser.set_window_size(1280, 10000)  # 设定窗口大小，服务于后面的绝对定位点击
-        time.sleep(2)
-        self.jumpToHome()
-        time.sleep(2)
-        self.openVideoList()
-        for i in range(6):
+
+        try:
+            while self.isLogin == False:
+                self.login(username, pwd)
+                time.sleep(2)
+                if self.browser.current_url != 'https://pc.xuexi.cn/points/my-study.html':
+                    print('登录失败，可能是出现了验证码，建议确认账号密码或等待重试')
+                    time.sleep(4)
+                else:
+                    print('登录成功')
+                    self.isLogin = True
+            # 阅读文章积分
+            self.jumpToHome()
             time.sleep(2)
-            self.watchVideo(i)
+            self.openArticleList()
+            time.sleep(8)
+            for i in range(8):
+                time.sleep(2)
+                self.watchArticle(i)
+            # 看视频计分
+            # self.browser.set_window_size(1280, 10000)  # 设定窗口大小，服务于后面的绝对定位点击
+            time.sleep(2)
+            self.jumpToHome()
+            time.sleep(2)
+            self.openVideoList()
+            for i in range(8):
+                time.sleep(2)
+                self.watchVideo(i)
+        except Exception as e:
+            self.browser.close();
+            print(e)
 
     def login(self, username, pwd):
         print('进入登录页')
@@ -49,7 +63,7 @@ class TechnologyPower:
             'document.getElementById("mobile").style.display="block";')
         self.browser.execute_script(
             'document.getElementById("pwd").style.display="block";')
-
+        ActionChains(self.browser).move_by_offset(0,0).move_by_offset(100,100).move_by_offset(70,70).perform()
         mobileIptDom = self.browser.find_element_by_id('mobile')
         pwdIptDom = self.browser.find_element_by_id('pwd')
         loginIptDom = self.browser.find_element_by_id('loginBtn')
@@ -64,17 +78,27 @@ class TechnologyPower:
 
     def openArticleList(self):
         # logoDom = self.browser.find_elements_by_class_name('div-background-img-stretching')[2]
-        logoDom = self.browser.find_elements_by_class_name('word-item')[29]
-        logoDom.click()
+        # logoDom = self.browser.find_elements_by_class_name('word-item')[29]
+        # logoDom = self.browser.find_element_by_class_name('box_shijiuda')
+        # WebDriverWait(self.browser, 5).until(expected_conditions.visibility_of_element_located(
+        #     (By.CSS_SELECTOR, ".div-background-img-stretching")))
+        # logoDom = self.browser.find_elements_by_css_selector(
+        #     '.div-background-img-stretching>div')[0]
+
+        # logoDom = self.browser.find_element_by_class_name('moreUrl')
+        # logoDom.click()
+        self.browser.execute_script('document.getElementsByClassName("moreUrl")[0].click()')
         self.browser.close()
         self.browser.switch_to.window(self.browser.window_handles[0])
         self.articleListHandle = self.browser.current_window_handle
 
     def watchArticle(self, index):
+        # articleList = self.browser.find_elements_by_class_name(
+        #    'text-link-item-title')
+        # articleList[index + 1].click()
         articleList = self.browser.find_elements_by_class_name(
-            'text-link-item-title')
-        articleList[index].click()
-
+           'grid-cell')
+        articleList[index + 9].click()
         self.browser.switch_to.window(self.browser.window_handles[1])
         if self.browser.title == '内容详情':
             self.browser.refresh()
@@ -84,8 +108,8 @@ class TechnologyPower:
         self.browser.execute_script('window.scrollTo(0, window.innerHeight)')
         for i in range(70):
             key = Keys.DOWN
-            if random.random() > 0.5:
-                key = Keys.UP
+            # if random.random() > 0.5:
+            #     key = Keys.UP
             ActionChains(self.browser).key_down(key).perform()
             time.sleep(2)
 
@@ -98,7 +122,8 @@ class TechnologyPower:
         time.sleep(3)
 
     def openVideoList(self):
-        logoDom = self.browser.find_elements_by_class_name('radio-inline')[0]
+        # logoDom = self.browser.find_elements_by_class_name('radio-inline')[0]
+        logoDom = self.browser.find_elements_by_class_name('center-item')[0]
         logoDom.click()
         self.browser.close()
         self.browser.switch_to.window(self.browser.window_handles[0])
@@ -106,7 +131,7 @@ class TechnologyPower:
         time.sleep(2)
         # self.browser.find_element_by_link_text('学习专题报道').click()
         self.browser.find_elements_by_class_name('tab-wrapper')[11].click()
-        time.sleep(2)
+        time.sleep(5)
         self.browser.find_element_by_class_name('list').click()
 
     def watchVideo(self, index):
@@ -187,8 +212,17 @@ class TechnologyPower:
             r = int(date.split(':')[0]) * 60 + int(date.split(':')[1])
         except Exception as e:
             print(e)
+            print(date)
         return r
 
-username = input('输入钉钉账号: ')
-pwd = input('输入钉钉密码: ')
+username = ''
+pwd = ''
+if os.path.exists('./passport'):
+    f = open('./passport', 'r')
+    data = f.read().split('|')
+    username = data[0]
+    pwd = data[1]
+else:
+    username = input('输入钉钉账号: ')
+    pwd = input('输入钉钉密码: ')
 myTechnologyPower = TechnologyPower(username, pwd)
