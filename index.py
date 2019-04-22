@@ -35,13 +35,18 @@ class TechnologyPower:
                     print('登录成功')
                     self.isLogin = True
             # 阅读文章积分
+            aritcleCount = 8
             self.jumpToHome()
             time.sleep(2)
             self.openArticleList()
             time.sleep(8)
-            for i in range(8):
+            for i in range(aritcleCount):
                 time.sleep(2)
-                self.watchArticle(i)
+                try:
+                    self.watchArticle(i)
+                except:
+                    print('第d%篇文章没能阅读成功' % i)
+                    aritcleCount = aritcleCount + 1
             # 看视频计分
             # self.browser.set_window_size(1280, 10000)  # 设定窗口大小，服务于后面的绝对定位点击
             time.sleep(2)
@@ -52,7 +57,7 @@ class TechnologyPower:
                 time.sleep(2)
                 self.watchVideo(i)
         except Exception as e:
-            self.browser.close();
+            self.browser.close()
             print(e)
 
     def login(self, username, pwd):
@@ -63,7 +68,8 @@ class TechnologyPower:
             'document.getElementById("mobile").style.display="block";')
         self.browser.execute_script(
             'document.getElementById("pwd").style.display="block";')
-        ActionChains(self.browser).move_by_offset(0,0).move_by_offset(100,100).move_by_offset(70,70).perform()
+        ActionChains(self.browser).move_by_offset(0, 0).move_by_offset(
+            100, 100).move_by_offset(70, 70).perform()
         mobileIptDom = self.browser.find_element_by_id('mobile')
         pwdIptDom = self.browser.find_element_by_id('pwd')
         loginIptDom = self.browser.find_element_by_id('loginBtn')
@@ -87,23 +93,25 @@ class TechnologyPower:
 
         # logoDom = self.browser.find_element_by_class_name('moreUrl')
         # logoDom.click()
-        self.browser.execute_script('document.getElementsByClassName("moreUrl")[0].click()')
+        self.browser.execute_script(
+            'document.getElementsByClassName("moreUrl")[0].click()')
         self.browser.close()
         self.browser.switch_to.window(self.browser.window_handles[0])
         self.articleListHandle = self.browser.current_window_handle
 
     def watchArticle(self, index):
-        # articleList = self.browser.find_elements_by_class_name(
-        #    'text-link-item-title')
-        # articleList[index + 1].click()
         articleList = self.browser.find_elements_by_class_name(
-           'grid-cell')
-        articleList[index + 9].click()
+            'text-link-item-title')
+        ActionChains(self.browser).send_keys(Keys.SPACE)
+        articleList[index + 1].click()
+        # articleList = self.browser.find_elements_by_class_name(
+        #    'grid-cell')
+        # articleList[index + 9].click()
         self.browser.switch_to.window(self.browser.window_handles[1])
         if self.browser.title == '内容详情':
             self.browser.refresh()
             time.sleep(5)
-        print('开始文章：' + self.browser.title)
+        print('开始文章第'+str(index+1)+'篇：' + self.browser.title)
         start = time.time()
         self.browser.execute_script('window.scrollTo(0, window.innerHeight)')
         for i in range(70):
@@ -214,6 +222,7 @@ class TechnologyPower:
             print(e)
             print(date)
         return r
+
 
 username = ''
 pwd = ''
