@@ -17,7 +17,7 @@ class TechnologyPower:
         self.homeUrl = 'https://www.xuexi.cn/'
         self.isLogin = False
         option = webdriver.ChromeOptions()
-        option.add_argument("headless")
+        # option.add_argument("headless")
         option.add_experimental_option(
             "prefs", {"profile.managed_default_content_settings.images": 2})
         self.browser = webdriver.Chrome(options=option)
@@ -45,7 +45,7 @@ class TechnologyPower:
                 try:
                     self.watchArticle(i)
                 except:
-                    print('第d%篇文章没能阅读成功' % i)
+                    print('第 d% 篇文章没能阅读成功' % i)
                     aritcleCount = aritcleCount + 1
             # 看视频计分
             # self.browser.set_window_size(1280, 10000)  # 设定窗口大小，服务于后面的绝对定位点击
@@ -58,6 +58,7 @@ class TechnologyPower:
                 self.watchVideo(i)
         except Exception as e:
             self.browser.close()
+            self.browser.quit()
             print(e)
 
     def login(self, username, pwd):
@@ -83,18 +84,8 @@ class TechnologyPower:
             'window.location.href="' + self.homeUrl + '"')
 
     def openArticleList(self):
-        # logoDom = self.browser.find_elements_by_class_name('div-background-img-stretching')[2]
-        # logoDom = self.browser.find_elements_by_class_name('word-item')[29]
-        # logoDom = self.browser.find_element_by_class_name('box_shijiuda')
-        # WebDriverWait(self.browser, 5).until(expected_conditions.visibility_of_element_located(
-        #     (By.CSS_SELECTOR, ".div-background-img-stretching")))
-        # logoDom = self.browser.find_elements_by_css_selector(
-        #     '.div-background-img-stretching>div')[0]
-
-        # logoDom = self.browser.find_element_by_class_name('moreUrl')
-        # logoDom.click()
         self.browser.execute_script(
-            'document.getElementsByClassName("moreUrl")[0].click()')
+            'document.getElementsByClassName("linkSpan")[0].click()')
         self.browser.close()
         self.browser.switch_to.window(self.browser.window_handles[0])
         self.articleListHandle = self.browser.current_window_handle
@@ -104,9 +95,6 @@ class TechnologyPower:
             'text-link-item-title')
         ActionChains(self.browser).send_keys(Keys.SPACE)
         articleList[index + 1].click()
-        # articleList = self.browser.find_elements_by_class_name(
-        #    'grid-cell')
-        # articleList[index + 9].click()
         self.browser.switch_to.window(self.browser.window_handles[1])
         if self.browser.title == '内容详情':
             self.browser.refresh()
@@ -116,11 +104,8 @@ class TechnologyPower:
         self.browser.execute_script('window.scrollTo(0, window.innerHeight)')
         for i in range(70):
             key = Keys.DOWN
-            # if random.random() > 0.5:
-            #     key = Keys.UP
             ActionChains(self.browser).key_down(key).perform()
             time.sleep(2)
-
         self.browser.close()
         self.browser.switch_to.window(self.articleListHandle)
         end = time.time()
@@ -130,16 +115,14 @@ class TechnologyPower:
         time.sleep(3)
 
     def openVideoList(self):
-        # logoDom = self.browser.find_elements_by_class_name('radio-inline')[0]
         logoDom = self.browser.find_elements_by_class_name('center-item')[0]
         logoDom.click()
         self.browser.close()
         self.browser.switch_to.window(self.browser.window_handles[0])
         self.videoListHandle = self.browser.current_window_handle
         time.sleep(2)
-        # self.browser.find_element_by_link_text('学习专题报道').click()
-        self.browser.find_elements_by_class_name('tab-wrapper')[11].click()
-        time.sleep(5)
+        # self.browser.find_elements_by_class_name('tab-wrapper')[11].click()
+        # time.sleep(5)
         self.browser.find_element_by_class_name('list').click()
 
     def watchVideo(self, index):
@@ -147,11 +130,9 @@ class TechnologyPower:
             'text-link-item-title')
         videoList[index].click()
         self.browser.switch_to.window(self.browser.window_handles[1])
-        # self.browser.execute_script('window.scrollTo(0, window.innerHeight)')
         if(self.browser.title == '视频播放'):
             print('刷新试试↓↓↓')
             self.browser.refresh()
-            # self.browser.execute_script('window.scrollTo(0, window.innerHeight)')
             time.sleep(3)
             self.browser.find_element_by_class_name('outter').click()
         print('开始视频：' + self.browser.title)
@@ -160,15 +141,6 @@ class TechnologyPower:
         self.browser.execute_script(
             'document.getElementsByClassName("prism-controlbar")[0].style.display="block"')
         time.sleep(4)
-        # try:
-        #     totalTime = self.browser.find_element_by_class_name(
-        #         'duration').text
-        #     _totalTime = int(totalTime.split(
-        #         ':')[0]) * 60 + int(totalTime.split(':')[1])
-        # except:
-        #     _totalTime = 180
-        # if _totalTime > 200:
-        #     _totalTime = 200
         totalTime = self.browser.find_element_by_class_name(
             'duration').text
         print('时长：' + totalTime)
@@ -187,19 +159,6 @@ class TechnologyPower:
                                            math.floor(self.dateToInt(current_time)/self.dateToInt(totalTime) * 100)*'#'))
             sys.stdout.flush()
             time.sleep(2)
-
-        # self.browser.find_element_by_class_name('prism-play-btn').click()
-        # self.browser.execute_script('document.getElementsByClassName("prism-play-btn")[0].click()')
-
-        # for i in range(_totalTime):
-        #     key = Keys.DOWN
-        #     if random.random() > 0.5:
-        #         key = Keys.UP
-        #     ActionChains(self.browser).key_down(key).perform()
-        #     time.sleep(1)
-        # self.browser.execute_script('window.scrollTo(0, 0)')
-
-        # ActionChains(self.browser).move_by_offset(0, 0).move_by_offset(1100, 1045).click().perform()
         time.sleep(6)
 
         self.browser.execute_script(
