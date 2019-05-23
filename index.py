@@ -17,7 +17,7 @@ class TechnologyPower:
         self.homeUrl = 'https://www.xuexi.cn/'
         self.isLogin = False
         option = webdriver.ChromeOptions()
-        # option.add_argument("headless")
+        option.add_argument("headless")
         option.add_experimental_option(
             "prefs", {"profile.managed_default_content_settings.images": 2})
         self.browser = webdriver.Chrome(options=option)
