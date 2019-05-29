@@ -12,6 +12,8 @@ import math
 
 
 class TechnologyPower:
+    def __del__(self):
+        self.browser.close()
     def __init__(self, username, pwd):
         self.startUrl = 'https://login.dingtalk.com/login/index.htm?goto=https%3A%2F%2Foapi.dingtalk.com%2Fconnect%2Foauth2%2Fsns_authorize%3Fappid%3Ddingoankubyrfkttorhpou%26response_type%3Dcode%26scope%3Dsnsapi_login%26redirect_uri%3Dhttps%3A%2F%2Fpc-api.xuexi.cn%2Fopen%2Fapi%2Fsns%2Fcallback'
         self.homeUrl = 'https://www.xuexi.cn/'
@@ -120,7 +122,7 @@ class TechnologyPower:
         self.browser.close()
         self.browser.switch_to.window(self.browser.window_handles[0])
         self.videoListHandle = self.browser.current_window_handle
-        time.sleep(2)
+        time.sleep(10)
         # self.browser.find_elements_by_class_name('tab-wrapper')[11].click()
         # time.sleep(5)
         self.browser.find_element_by_class_name('list').click()
