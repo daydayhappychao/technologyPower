@@ -19,7 +19,7 @@ for i in range(7):
   if i > 1:
     count = 6
   for j in range(60):
-    process = subprocess.Popen('adb shell input swipe 500 1000 500 700', shell=True)
+    process = subprocess.Popen('adb shell input swipe 500 1000 500 950', shell=True)
     time.sleep(2)
   # 收藏
   subprocess.Popen('adb shell input tap 844 1735', shell=True)
@@ -67,15 +67,14 @@ for i in range(7):
 process = subprocess.Popen('adb shell input tap 755 1729', shell=True)
 time.sleep(0.2)
 process = subprocess.Popen('adb shell input tap 755 1729', shell=True)
-time.sleep(sleep_time)
-subprocess.Popen('adb shell input swipe 500 1500 500 800', shell=True)
+time.sleep(10)
 # 看6个视频
 for i in range(7):
   process = subprocess.Popen('adb shell input tap 500 ' + str(1100 + 240 * (i % 3)), shell=True)
   time.sleep(sleep_time)
-  for j in range(20):
+  for j in range(6):
     process = subprocess.Popen('adb shell input swipe 270 377 500 377', shell=True)
-    time.sleep(10)
+    time.sleep(30)
   process = subprocess.Popen('adb shell input keyevent KEYCODE_BACK', shell=True)
   time.sleep(2)
   if i == 2: 
@@ -86,12 +85,3 @@ for i in range(7):
 
 
 time.sleep(sleep_time)
-# process = subprocess.Popen('adb shell input tap 375 1402', shell=True)
-# time.sleep(sleep_time)
-# process = subprocess.Popen('adb shell input keyevent KEYCODE_BACK', shell=True)
-# time.sleep(sleep_time)
-#os.system('adb shell input tap 14 1402')
-#os.system('adb shell input keyevent KEYCODE_BACK')
-#os.system('adb shell input tap 375 1402')
-# i+=1
-# print  str(i) + 'clicks have been completed' 
