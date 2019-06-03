@@ -19,7 +19,7 @@ for i in range(7):
   if i > 1:
     count = 6
   for j in range(60):
-    process = subprocess.Popen('adb shell input swipe 500 1000 500 950', shell=True)
+    process = subprocess.Popen('adb shell input swipe 500 1000 500 900', shell=True)
     time.sleep(2)
   # 收藏
   subprocess.Popen('adb shell input tap 844 1735', shell=True)
