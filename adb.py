@@ -7,19 +7,19 @@ sleep_time = 2
 #用popen设置shell=True不会弹出cmd框
 process = subprocess.Popen('adb shell input tap 565 1713', shell=True)
 time.sleep(sleep_time)
-process = subprocess.Popen('adb shell input tap 262 300', shell=True)
+process = subprocess.Popen('adb shell input tap 640 300', shell=True)
 time.sleep(sleep_time)
 
 # 看6片文章，每篇2min
 for i in range(7):
-  process = subprocess.Popen('adb shell input tap 500 ' + str(500 + 280 * (i % 3)), shell=True)
+  process = subprocess.Popen('adb shell input tap 500 ' + str(600 + 330 * (i % 3)), shell=True)
   time.sleep(sleep_time)
 
   count = 60
   if i > 1:
     count = 6
   for j in range(60):
-    process = subprocess.Popen('adb shell input swipe 500 1000 500 900', shell=True)
+    process = subprocess.Popen('adb shell input swipe 500 1000 500 850', shell=True)
     time.sleep(2)
   # 收藏
   subprocess.Popen('adb shell input tap 844 1735', shell=True)
@@ -57,29 +57,32 @@ for i in range(7):
 
   process = subprocess.Popen('adb shell input keyevent KEYCODE_BACK', shell=True)
   time.sleep(2)
-  if i == 2: 
-    subprocess.Popen('adb shell input swipe 500 1500 500 950', shell=True)
+  if i == 2 or i == 4: 
+    subprocess.Popen('adb shell input swipe 500 1500 500 900', shell=True)
     time.sleep(3)
 
 
 #  进入视频
 
 process = subprocess.Popen('adb shell input tap 755 1729', shell=True)
-time.sleep(0.2)
-process = subprocess.Popen('adb shell input tap 755 1729', shell=True)
+time.sleep(sleep_time)
+process = subprocess.Popen('adb shell input tap 600 300', shell=True)
 time.sleep(10)
+process = subprocess.Popen('adb shell input swipe 500 1500 500 1040', shell=True)
+time.sleep(sleep_time)
+
 # 看6个视频
 for i in range(7):
-  process = subprocess.Popen('adb shell input tap 500 ' + str(1100 + 240 * (i % 3)), shell=True)
+  process = subprocess.Popen('adb shell input tap 500 ' + str(640 + 400 * (i % 3)), shell=True)
   time.sleep(sleep_time)
-  for j in range(6):
+  for j in range(8):
     process = subprocess.Popen('adb shell input swipe 270 377 500 377', shell=True)
     time.sleep(30)
   process = subprocess.Popen('adb shell input keyevent KEYCODE_BACK', shell=True)
-  time.sleep(2)
-  if i == 2: 
+  time.sleep(sleep_time)
+  if i == 2 or i == 4: 
     subprocess.Popen('adb shell input swipe 500 1500 500 800', shell=True)
-    time.sleep(3)
+    time.sleep(sleep_time)
 
 
 
