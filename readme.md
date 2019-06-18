@@ -20,3 +20,10 @@
 2. 使用:
 - 打开xxqgAPP，登录
 - ``python3 adb.py``
+
+#### 当出现 ``` error: no devices/emulators found ```时
+``` 
+adb kill-server   
+adb start-server
+adb remount 
+``` 
