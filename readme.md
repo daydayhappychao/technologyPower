@@ -16,7 +16,11 @@
   - 下载安装mumu模拟器
   - 在模拟器里安装“学习强国”APP
   - 打开mumu模拟器偏好设置，将分辨率调整为1920*1080
-  - [参考文档](https://blog.csdn.net/slimboy123/article/details/54140029),大概就是安装ADBKey.apk,然后调整当前输入法为adbkeyboard
+  - [参考文档](https://blog.csdn.net/slimboy123/article/details/54140029),大概就是安装ADBKey.apk,然后调整当前输入法为adbkeyboard  
+  - 设置效果图与预览效果图如下：  
+  ![设置效果图](./setting.png)  
+  ![预览效果图](./preview.png)  
+
 2. 使用:
 - 打开xxqgAPP，登录
 - ``python3 adb.py``
