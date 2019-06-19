@@ -8,7 +8,7 @@ subprocess.Popen('adb shell input tap 540 1900', shell=True)
 time.sleep(sleep_time)
 subprocess.Popen('adb shell input tap 431 191', shell=True)
 time.sleep(10)
-subprocess.Popen('adb shell input swipe 500 1750 500 280', shell=True)
+subprocess.Popen('adb shell input swipe 500 1750 500 80', shell=True)
 time.sleep(sleep_time)
 
 # 看6片文章，每篇2min
