@@ -31,7 +31,7 @@ for i in range(9):
   # 分享
   subprocess.Popen('adb shell input tap 1020 1872', shell=True)
   time.sleep(2)
-  subprocess.Popen('adb shell input tap 145 1625', shell=True)
+  subprocess.Popen('adb shell input tap 950 1368', shell=True)
   time.sleep(2)
   # subprocess.Popen('adb shell input keyevent KEYCODE_BACK', shell=True)
   # time.sleep(2)
